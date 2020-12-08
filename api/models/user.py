@@ -2,7 +2,6 @@ from database.db import db
 from passlib.hash import pbkdf2_sha256 as sha256
 
 class UserModel(db.Model):
-
     __tablename__ = "users"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -16,7 +15,7 @@ class UserModel(db.Model):
         self.email = email        
     
     def json(self):
-        return {'id':self.id, 'name': self.name, 'email': self.email }
+        return {'id':self.id, 'name': self.name, 'email': self.email}
 
     @classmethod
     def find_by_name(cls, name):
