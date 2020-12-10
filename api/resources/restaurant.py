@@ -6,21 +6,27 @@ class Restaurant(Resource):
     parser.add_argument('manager_id', 
         type=int,
         required=True,
-        help="This field cannot be left blank!"
+        help="Every restaurant needs a manager ID!"
+    )
+    parser.add_argument('name', 
+        type=str,
+        required=True,
+        help="Name cannot be left blank!"
     )
 
     def get(self, name):
-        restaurant = RestaurantModel.find_by_name(name)
+        restaurant = RestaurantModel.get_by_name(name)
         if restaurant:
             return restaurant.json()
         return {'message':'restaurant not found'}, 404
 
-    def post(self, name):
-        if RestaurantModel.find_by_name(name):
+    def post(self):
+        data = Restaurant.parser.parse_args()
+                
+        if RestaurantModel.get_by_name(data["name"]):
             return {'message': 'restaurant already exists'}, 400
 
-        data = Restaurant.parser.parse_args()
-        restaurant = RestaurantModel(name, **data)
+        restaurant = RestaurantModel(**data)
 
         try:
             restaurant.save_to_db()
@@ -30,10 +36,15 @@ class Restaurant(Resource):
         return restaurant.json(), 201
 
     def delete(self, name):
-        restaurant = RestaurantModel.find_by_name(name)
+        restaurant = RestaurantModel.get_by_name(name)
 
         if restaurant:
             restaurant.delete_from_db()
             return {'message':'restaurant deleted'}
 
         return {'message':'No restaurant with name {} exists'.format(name)}, 404
+
+class RestaurantList(Resource):
+
+    def get(self):
+        return {"restaurants": [restaurant.json() for restaurant in RestaurantModel.get_all_restaurants()]}

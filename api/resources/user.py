@@ -20,17 +20,17 @@ class User(Resource):
     )    
     
     def get(self, name):
-        user = UserModel.find_by_name(name)
+        user = UserModel.get_by_name(name)
         if user:
             return user.json()
-        return {'message':'user not found'}, 404
+        return {'message':'User {} not found'.format(name)}, 404
 
 
     def post(self):
         data = User.parser.parse_args()
         user = None
 
-        if UserModel.find_by_name(data['name']):
+        if UserModel.get_by_name(data['name']):
             return {"message": "Cannot create user - name already exists"}, 400
 
         name = data['name']
@@ -46,7 +46,7 @@ class User(Resource):
         return user.json(), 201
 
     def delete(self, name):
-        user = UserModel.find_by_name(name)
+        user = UserModel.get_by_name(name)
 
         if user:
             try:
@@ -59,7 +59,7 @@ class User(Resource):
         
     def put(self, name):
         data = User.parser.parse_args()
-        user = UserModel.find_by_name(name)
+        user = UserModel.get_by_name(name)
 
         if user:
             user.name = data['name']

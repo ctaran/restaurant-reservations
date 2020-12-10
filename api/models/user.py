@@ -18,15 +18,15 @@ class UserModel(db.Model):
         return {'id':self.id, 'name': self.name, 'email': self.email}
 
     @classmethod
-    def find_by_name(cls, name):
+    def get_by_name(cls, name):
         return cls.query.filter_by(name=name).first()
 
     @classmethod
-    def find_by_email(cls, email):
+    def get_by_email(cls, email):
         return cls.query.filter_by(email=email).first()
 
     @classmethod
-    def find_by_id(cls, _id):
+    def get_by_id(cls, _id):
         return cls.query.filter_by(id = _id).first()
 
     def save_to_db(self):

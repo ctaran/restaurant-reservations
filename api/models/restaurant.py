@@ -16,7 +16,11 @@ class RestaurantModel(db.Model):
         return {'id':self.id, 'name': self.name, 'manager':self.manager_id }
 
     @classmethod
-    def find_by_name(cls, name):
+    def get_by_id(cls, _id):
+        return cls.query.filter_by(id = _id).first()
+
+    @classmethod
+    def get_by_name(cls, name):
         return cls.query.filter_by(name=name).first()
 
     @classmethod

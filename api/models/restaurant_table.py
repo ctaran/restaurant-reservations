@@ -1,7 +1,7 @@
 from database.db import db
 
-class TableModel(db.Model):
-    __tablename__ = "tables"
+class RestaurantTableModel(db.Model):
+    __tablename__ = "restaurant_tables"
 
     id = db.Column(db.Integer, primary_key=True)
     index = db.Column(db.Integer, nullable=False)
@@ -21,6 +21,7 @@ class TableModel(db.Model):
     
     def json(self):
         return {
+            'id': self.id,
             'index': self.index,
             'pos_x': self.pos_x, 
             'pos_y': self.pos_y, 
@@ -35,6 +36,14 @@ class TableModel(db.Model):
     @classmethod
     def get_by_restaurant_id(cls, restaurant_id):
         return cls.query.filter_by(restaurant_id=restaurant_id).all()
+
+    @classmethod
+    def get_next_table_index(cls, restaurant_id):
+        table = cls.query.filter_by(restaurant_id=restaurant_id).order_by(cls.index.desc()).first()
+        if table:        
+            return table.index + 1
+        else:
+            return 1
     
     def save_to_db(self):
         db.session.add(self)

@@ -1,15 +1,8 @@
-from sqlalchemy.sql.schema import Table
-from models.table import TableModel
+from models.restaurant_table import RestaurantTableModel
 from flask_restful import Resource, reqparse
-import ast
 
-class Review(Resource):
+class RestaurantTable(Resource):
     parser = reqparse.RequestParser()
-    parser.add_argument('index', 
-        type=int,
-        required=True,
-        help="Index field cannot be left blank!"
-    )
     parser.add_argument('pos_x', 
         type=int,
         required=True,
@@ -32,35 +25,36 @@ class Review(Resource):
     )
 
     def post(self):
-        data = Review.parser.parse_args()
-        review = TableModel(**data)
-
+        data = RestaurantTable.parser.parse_args()
+        index = RestaurantTableModel.get_next_table_index(data["restaurant_id"])
+        table = RestaurantTableModel(index,**data)
+        
         try:
-            review.save_to_db()
+            table.save_to_db()
         except Exception as err:
             return {"message": "An error occurred inserting the table - {}".format(err)}, 500
 
-        return review.json(), 201
+        return table.json(), 201
 
     def delete(self, id):
-        review = TableModel.get_by_id(id)
+        table = RestaurantTableModel.get_by_id(id)
 
-        if Review:
-            review.delete_from_db()
+        if table:
+            table.delete_from_db()
             return {'message':'table deleted'}
 
         return {'message':'No table with id {} exists'.format(id)}, 404
         
     def put(self, id):
-        data = Review.parser.parse_args()
-        table = TableModel.get_by_id(id)
+        data = RestaurantTable.parser.parse_args()
+        table = RestaurantTableModel.get_by_id(id)
 
         if table:
                 table.pos_x = data["pos_x"]
                 table.pos_y = data["pos_y"]
                 table.seats = data["seats"]
         else:
-                table = TableModel(id, **data)
+                table = RestaurantTableModel(id, **data)
                 
         try:
             table.save_to_db()
@@ -69,18 +63,18 @@ class Review(Resource):
         
         return table.json()
 
-class TableList(Resource):
+class RestaurantTableList(Resource):
 
     parser = reqparse.RequestParser()
     parser.add_argument('restaurant_id', type=int)
 
     def get(self):
 
-        args = TableList.parser.parse_args()        
+        args = RestaurantTableList.parser.parse_args()        
 
         if args['restaurant_id']:
             restaurant_id = args['restaurant_id']
-            result = TableModel.get_by_restaurant_id(restaurant_id)
+            result = RestaurantTableModel.get_by_restaurant_id(restaurant_id)
             return {"tables":[table.json() for table in result]}
         else:
             return {"message": "Missing Restaurant ID"}, 400
