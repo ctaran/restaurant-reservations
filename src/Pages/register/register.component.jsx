@@ -19,16 +19,16 @@ class Register extends Component {
                         }}
                         enableReinitialize
                         validationSchema={Yup.object().shape({
-                            name: Yup.string().required('Username is required'),
+                            username: Yup.string().required('Username is required'),
                             password: Yup.string().required('Password is required'),
                             email: Yup.string().required('Email is required'),
                         })}
-                        onSubmit={({ name, password, email }, { setStatus, setSubmitting, resetForm }) => {
-                            userService.registerUser(name, password, email)
+                        onSubmit={({ username, password, email }, { setStatus, setSubmitting, resetForm }) => {
+                            userService.registerUser(username, password, email)
                                 .then(() => {
+                                    resetForm({});                                
                                     setSubmitting(false);
                                     setStatus();
-                                    resetForm();
                                 },
                                     error => {
                                         setSubmitting(false);
@@ -40,9 +40,9 @@ class Register extends Component {
                             <Segment>
                                 <Form>
                                     <div className="form-group">
-                                        <label htmlFor="name">Name:</label>
-                                        <Field name="name" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} />
-                                        <ErrorMessage name="name" component="div" className="invalid-feedback" />
+                                        <label htmlFor="username">Name:</label>
+                                        <Field name="username" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} />
+                                        <ErrorMessage name="username" component="div" className="invalid-feedback" />
                                     </div>
                                     <div className="form-group">
                                         <label htmlFor="password">Password:</label>
