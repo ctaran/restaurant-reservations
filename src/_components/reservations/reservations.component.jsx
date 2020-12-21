@@ -1,5 +1,5 @@
 import React from 'react';
-import ReservationsGrid from './reservations-panel/reservations-panel.component';
+import ReservationsGrid from './reservations-grid/reservations-grid.component';
 
 const Reservations = () => (
     <div>

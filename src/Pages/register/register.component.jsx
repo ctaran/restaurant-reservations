@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import { Button, Message, Segment } from 'semantic-ui-react';
 import { ErrorMessage, Field, Formik, Form } from 'formik';
 import * as Yup from 'yup';
-import { userService } from '../../_services';
+import { authenticationService, userService } from '../../_services';
 
 class Register extends Component {
     render() {
@@ -29,6 +29,10 @@ class Register extends Component {
                                     resetForm({});                                
                                     setSubmitting(false);
                                     setStatus();
+                                    authenticationService.login(username, password)
+                                        .then(() => {
+                                            this.props.history.push("/"); 
+                                        });                            
                                 },
                                     error => {
                                         setSubmitting(false);

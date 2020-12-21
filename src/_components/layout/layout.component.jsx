@@ -1,5 +1,5 @@
 import React from 'react';
-import TablesGrid from './tables-panel/tables-panel.component';
+import TablesGrid from './tables-grid/tables-grid.component';
 
 const Layout = () => (
     <div>

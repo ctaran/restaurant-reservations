@@ -28,9 +28,9 @@ class App extends Component {
   render() {
     return (
       <div className="container">          
-        <nav className="navbar fixed-top navbar-expand navbar-dark" style={{ background: "#787873" }}>
+        {/* <nav className="navbar fixed-top navbar-expand navbar-dark" style={{ background: "#787873" }}>
           <span className="navbar-brand mb-0 h0"><b>Restaurant Reservations</b></span>              
-        </nav>
+        </nav> */}
         <div className="jumbotron bg-white mt-4">
           <div className="container">
             <div className="row">
@@ -38,7 +38,7 @@ class App extends Component {
                   <PrivateRoute exact path="/" component={Home} />
                   <Route path="/login" component={Login} /> 
                   <Route path="/register" component={Register} />                    
-                  {/* <Route render={() => <h1>Page not found</h1>} /> */}
+                  <Route render={() => <h1>Page not found</h1>} />
                 </Switch>
             </div>
           </div>

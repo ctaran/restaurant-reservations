@@ -1,28 +1,55 @@
 import React from 'react';
-import { Button, Grid } from 'semantic-ui-react';
-import _ from 'lodash';
-import ReservationsForm from '../reservations-form/reservations-form.component';
+import { Button, Modal } from 'semantic-ui-react';
+import ReservationForm from '../reservation-form/reservation-form.component';
+import ReservationList from '../reservation-list/reservation-list.component';
 
-const ReservationsGrid = () => {
-    const columns = _.times(10, (i) => (
-        <Grid.Column key={i}>            
-            <ReservationsForm>
-                <Button size='tiny' color='grey' inverted>#X - n seats</Button>
-            </ReservationsForm>
-        </Grid.Column>
-      ))
+function ReservationsPanel(props) {
+    const [reservationsOpen, setReservationsOpen] = React.useState(false);
+    const [addOpen, setAddOpen] = React.useState(false);
+    const [editOpen, setEditOpen] = React.useState(false);
+  
+    return (
+        <>                
+            <Modal
+            onClose={() => setReservationsOpen(false)}
+            onOpen={() => setReservationsOpen(true)}
+            open={reservationsOpen}
+            trigger={props.children}
+            >
+                <Modal.Header>Reservations for Table #X</Modal.Header>
+                <Modal.Content image>
+                    <ReservationList reservations={props.reservations}/>                    
+                </Modal.Content>
+                <Modal.Actions>
+                    <Button onClick={() => setAddOpen(true)} primary>Add Reservation</Button>
+                    <Button onClick={() => setEditOpen(true)} primary>Edit Reservation</Button>
+                    <Button color='black' onClick={() => setReservationsOpen(false)}>Back</Button>
+                </Modal.Actions>
+        
+                <Modal
+                    onClose={() => setAddOpen(false)}
+                    open={addOpen}
+                    size='small'
+                >
+                    <Modal.Header>Add new reservation</Modal.Header>
+                        <Modal.Content>
+                            <ReservationForm onSubmit={() => setAddOpen(false)} onClose={() => setAddOpen(false)}/>
+                        </Modal.Content>                   
+                </Modal>
+                <Modal
+                    onClose={() => setEditOpen(false)}
+                    open={editOpen}
+                    size='small'
+                >
+                    <Modal.Header>Update reservation</Modal.Header>
+                        <Modal.Content>
+                            <ReservationForm onSubmit={() => setEditOpen(false)} onClose={() => setEditOpen(false)}/>
+                        </Modal.Content>                   
+                </Modal>
 
-    const rows = _.times(15, (i) => (
-        <Grid.Row key={i}>
-            {columns}
-        </Grid.Row>        
-    ))
+            </Modal>
+        </>
+    )
+}
 
-    return (    
-        <Grid>
-            {rows}
-        </Grid>
-    );
-};    
-
-export default ReservationsGrid;
+export default ReservationsPanel;

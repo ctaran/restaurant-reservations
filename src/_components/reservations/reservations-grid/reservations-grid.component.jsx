@@ -1,12 +1,14 @@
 import React from 'react';
-import { Grid } from 'semantic-ui-react';
+import { Button, Grid } from 'semantic-ui-react';
 import _ from 'lodash';
-import TableForm from '../table-form/table-form.component';
+import ReservationsPanel from '../reservations-panel/reservations-panel.component';
 
-const TablesGrid = () => {
+const ReservationsGrid = () => {
     const columns = _.times(10, (i) => (
         <Grid.Column key={i}>            
-            <TableForm/>        
+            <ReservationsPanel>
+                <Button size='tiny' color='grey' inverted>#X - n seats</Button>
+            </ReservationsPanel>
         </Grid.Column>
       ))
 
@@ -23,4 +25,4 @@ const TablesGrid = () => {
     );
 };    
 
-export default TablesGrid;
+export default ReservationsGrid;
