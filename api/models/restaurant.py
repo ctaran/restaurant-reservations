@@ -7,6 +7,7 @@ class RestaurantModel(db.Model):
     name = db.Column(db.String(80))    
     manager_id = db.Column(db.Integer, db.ForeignKey('users.id'))
     manager = db.relationship('UserModel')
+    tables = db.relationship('RestaurantTableModel', back_populates='restaurant')
 
     def __init__(self, name, manager_id):
         self.name = name
@@ -18,6 +19,10 @@ class RestaurantModel(db.Model):
     @classmethod
     def get_by_id(cls, _id):
         return cls.query.filter_by(id = _id).first()
+
+    @classmethod
+    def get_by_manager_id(cls, manager_id):
+        return cls.query.filter_by(manager_id = manager_id).all()
 
     @classmethod
     def get_by_name(cls, name):

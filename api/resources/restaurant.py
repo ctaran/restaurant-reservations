@@ -46,5 +46,17 @@ class Restaurant(Resource):
 
 class RestaurantList(Resource):
 
+    parser = reqparse.RequestParser()
+    parser.add_argument('manager_id', type=int)
+
     def get(self):
-        return {"restaurants": [restaurant.json() for restaurant in RestaurantModel.get_all_restaurants()]}
+
+        args = RestaurantList.parser.parse_args()        
+
+        if args['manager_id']:
+            manager_id = args['manager_id']
+            restaurant = RestaurantModel.get_by_manager_id(manager_id)[0]
+            # return {"restaurants":[restaurant.json() for restaurant in result]}
+            return {"restaurant": dict(restaurant.json(), **{ "tables" : [table.json() for table in restaurant.tables]})}
+        else:
+            return {"message": "Missing Manager ID"}, 400
