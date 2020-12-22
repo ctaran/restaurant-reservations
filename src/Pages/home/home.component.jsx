@@ -32,13 +32,14 @@ class Home extends Component {
 
     render() {
         const { restaurant } = this.state;
+        var panes = null;
 
-        const panes = [
-            { menuItem: 'Layout', render: () => <Layout tables={restaurant.tables}/> },
-            { menuItem: 'Reservations', render: () => <Reservations tables={restaurant.tables}/> },
-        ]
-
-        console.log(restaurant);
+        if (restaurant){
+            panes = [
+                { menuItem: 'Layout', render: () => <Layout restaurant={restaurant}/> },
+                { menuItem: 'Reservations', render: () => <Reservations restaurant={restaurant}/> },
+            ]
+        }
 
         return (
             restaurant ?

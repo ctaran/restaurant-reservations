@@ -3,7 +3,7 @@ import { List } from 'semantic-ui-react';
 
 const ReservationList = ({ reservations }) => (    
     <List divided relaxed animated verticalAlign='middle'>
-        { reservations.length ? (
+        { reservations && reservations.length ? (
             reservations.map(reservation => (
                 <List.Item>
                     <List.Icon name='hand point right' size='large' verticalAlign='middle' />

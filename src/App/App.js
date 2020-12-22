@@ -20,8 +20,8 @@ class App extends Component {
   }
 
   componentDidMount() {
-    authenticationService.currentUser.subscribe(x => this.setState({
-      currentUser: x
+    authenticationService.currentUser.subscribe(user => this.setState({
+      currentUser: user
     }));
   }
 

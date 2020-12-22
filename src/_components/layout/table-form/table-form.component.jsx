@@ -1,26 +1,47 @@
 import React from 'react';
 import { Button, Form, Modal } from 'semantic-ui-react';
 
-function TableForm() {
-    const [open, setOpen] = React.useState(false)
+function TableForm( { table, maxIndex, handleSubmit, handleDelete } ) {
   
+    const [open, setOpen] = React.useState(false);
+    const [index, setIndex] = React.useState(
+      table ? table.index : maxIndex+1
+    )
+    const [seats, setSeats] = React.useState(
+      table ? table.seats : ''
+    );           
+
+    const onSubmit = () => {
+      const { seats } = this.state;  
+      handleSubmit(index, seats);
+      setOpen(false);
+    };
+
+    const onDelete = () => {
+      handleDelete(table.id);
+      setOpen(false);
+    }
+
     return (
       <Modal
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         open={open}
-        trigger={<Button size='tiny' color='green' inverted>#X - n seats</Button>}
+        trigger={<Button size='tiny' color='green' inverted>{table && `#${index} - ${seats} seats`}</Button>}
       >
-        <Modal.Header>Table X</Modal.Header>
+        <Modal.Header>Table {index}</Modal.Header>
         <Modal.Content>          
-          <Form>
-            <Form.Field>
-                <label>Seat count</label>
-                <input placeholder='Seat count' />
-            </Form.Field>            
-            <Button type='submit' onClick={() => setOpen(false)} positive>Submit</Button>
-            <Button color='red' onClick={() => setOpen(false)}>Delete Table</Button>
-            <Button color='black' onClick={() => setOpen(false)}>Cancel</Button>
+          <Form onSubmit={onSubmit}>
+            <Form.Input
+              placeholder='Number of seats'
+              label='Number of seats'
+              name='seats'
+              value={seats}
+              onChange={e => setSeats(e.target.value)}
+            />           
+            <Form.Button content='Submit' positive/>
+            <Button color='red' onClick={onDelete} disabled={!table}>Delete Table</Button>
+            <Button color='black' onClick={() => setOpen(false)}>Back</Button>
           </Form>
         </Modal.Content>
       </Modal>
