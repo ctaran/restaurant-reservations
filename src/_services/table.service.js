@@ -25,11 +25,11 @@ async function createNew(pos_x, pos_y, seats, restaurant_id) {
     return handleResponse(response);
 }
 
-async function updateByID(id, pos_x, pos_y, seats) {
+async function updateByID(id, pos_x, pos_y, seats, restaurant_id) {
     const requestOptions = {
         method: 'PUT', 
         headers: Object.assign({}, authHeader(),  { "Content-Type": "application/json" }),
-        body: JSON.stringify({ pos_x, pos_y, seats }),
+        body: JSON.stringify({ pos_x, pos_y, seats, restaurant_id }),
     }
     const response = await fetch(`/api/table/${id}`, requestOptions);
     return handleResponse(response);

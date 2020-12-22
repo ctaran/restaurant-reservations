@@ -1,6 +1,5 @@
 import React, { useEffect, useState } from 'react';
 import { Grid } from 'semantic-ui-react';
-import _ from 'lodash';
 import TableForm from '../table-form/table-form.component';
 
 const TablesGrid = ( { tables, createTable, updateTable, deleteTable } ) => {    
@@ -28,17 +27,19 @@ const TablesGrid = ( { tables, createTable, updateTable, deleteTable } ) => {
         setTablesDict(tbls);
         setMaxIndex(mindex);
 
-    }, []);
+    }, [tables]);
+
+    const handleCreateTable = (seats) => {        
+        createTable(seats);
+    }
+    
+    const handleUpdateTable = (id, pos_x, pos_y, seats) => {
+        updateTable(id, pos_x, pos_y, seats);
+    }
 
     const handleDeleteTable = (id) => {
         deleteTable(id);
-    }
-
-    const handleUpdateTable = (e, index, seats) => {
-        (index > maxIndex) ?
-        createTable(seats) :
-        updateTable(seats)
-    }
+    }        
 
     return (    
         <Grid>
@@ -46,7 +47,7 @@ const TablesGrid = ( { tables, createTable, updateTable, deleteTable } ) => {
                 <Grid.Row key={value[0]}>
                     { Object.entries(value[1]).map( (v) => 
                         <Grid.Column key={v[0]}>            
-                            <TableForm table={v[1]} maxIndex={maxIndex} handleSubmit={handleUpdateTable} handleDelete={handleDeleteTable}/>
+                            <TableForm table={v[1]} maxIndex={maxIndex} handleCreate={handleCreateTable} handleUpdate={handleUpdateTable} handleDelete={handleDeleteTable}/>
                         </Grid.Column>                                         
                     )}
                 </Grid.Row>

@@ -1,17 +1,17 @@
 import React from 'react';
 import TablesGrid from './tables-grid/tables-grid.component';
 
-const Layout = ({ restaurant }) => {
-    const onCreateTable = () => {
-
+const Layout = ({ restaurant, handleCreateTable, handleUpdateTable, handleDeleteTable }) => {
+    const onCreateTable = (seats) => {
+        handleCreateTable(seats);
     }
 
-    const onUpdateTable = () => {
-        
+    const onUpdateTable = (id, pos_x, pos_y, seats) => {
+        handleUpdateTable(id, pos_x, pos_y, seats);
     }
 
-    const onDeleteTable = () => {
-        
+    const onDeleteTable = (id) => {
+        handleDeleteTable(id);
     }
 
     return (

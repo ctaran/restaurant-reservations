@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button, Form, Modal } from 'semantic-ui-react';
 
-function TableForm( { table, maxIndex, handleSubmit, handleDelete } ) {
+function TableForm( { table, maxIndex, handleCreate, handleUpdate, handleDelete } ) {
   
     const [open, setOpen] = React.useState(false);
     const [index, setIndex] = React.useState(
@@ -11,9 +11,8 @@ function TableForm( { table, maxIndex, handleSubmit, handleDelete } ) {
       table ? table.seats : ''
     );           
 
-    const onSubmit = () => {
-      const { seats } = this.state;  
-      handleSubmit(index, seats);
+    const onSubmit = () => {            
+      table ? handleUpdate(table.id, table.pos_x, table.pos_y, seats) : handleCreate(seats);
       setOpen(false);
     };
 
