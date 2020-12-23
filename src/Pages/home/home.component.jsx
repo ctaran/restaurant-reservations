@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { Tab } from 'semantic-ui-react';
+import DefineRestaurant from '../../_components/define-restaurant/define-restaurant.component';
 import Layout from '../../_components/layout/layout.component';
 import Reservations from '../../_components/reservations/reservations.component';
 import { authenticationService } from '../../_services';
@@ -17,6 +18,8 @@ class Home extends Component {
         this.onCreateTable = this.onCreateTable.bind(this);
         this.onUpdateTable = this.onUpdateTable.bind(this);
         this.onDeleteTable = this.onDeleteTable.bind(this);
+        this.createRestaurant = this.createRestaurant.bind(this);
+        this.updateRestaurant = this.updateRestaurant.bind(this);
     }
 
     componentDidMount() {
@@ -53,7 +56,28 @@ class Home extends Component {
             .then(
                 (data) => {
                    this.setState({
-                       restaurant: data.restaurant
+                       restaurant: data
+                   });
+                },
+                (error) => {
+                    // if ([404].indexOf(error.status) !== -1) {
+                    //     this.setState({                            
+                    //         restaurantAssociated: false
+                    //     });
+                    // }
+                    console.log("message" + error.message);
+                }
+            )
+    }
+
+    createRestaurant(name) {
+        const manager_id = authenticationService.currentUserValue.id;
+        
+        restaurantService.createNew(name, manager_id)
+            .then(
+                (data) => {                    
+                   this.setState({
+                       restaurant: data
                    });
                 },
                 (error) => {
@@ -66,7 +90,7 @@ class Home extends Component {
         const { restaurant } = this.state;
         var panes = null;
 
-        if (restaurant){
+        if (restaurant) {
             panes = [
                 { menuItem: 'Layout', render: () => <Layout restaurant={restaurant} handleCreateTable={this.onCreateTable} handleUpdateTable={this.onUpdateTable} handleDeleteTable={this.onDeleteTable}/> },
                 { menuItem: 'Reservations', render: () => <Reservations restaurant={restaurant}/> },
@@ -78,13 +102,12 @@ class Home extends Component {
                 <div className="row">
                     <div className="col"></div>
                     <div className="col-12">
-                        <h1>Name: {restaurant.name}</h1>
+                        <h1>=== {restaurant.name} ===</h1>
                         <h2>Manager: {authenticationService.currentUserValue.name}</h2>
                         <Tab panes={panes} menu={{ pointing: true }} />
                     </div>
                     <div className="col"></div>
-                </div> :
-                <div>Loading...</div>          
+                </div> : <DefineRestaurant handleSubmit={this.createRestaurant}/>                           
         );
     }
 }

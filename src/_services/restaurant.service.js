@@ -21,11 +21,11 @@ async function getByManagerID(manager_id) {
     return handleResponse(response);
 }
 
-async function createNew(name, password, email) {
+async function createNew(name, manager_id) {
     const requestOptions = {
         method: 'POST', 
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ name, password, email })
+        body: JSON.stringify({ name, manager_id })
     }
     const response = await fetch(`/api/restaurant/new`, requestOptions);
     return handleResponse(response);
