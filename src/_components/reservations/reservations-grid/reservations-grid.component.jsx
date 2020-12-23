@@ -1,26 +1,48 @@
-import React from 'react';
+import React, { useEffect, useState } from 'react';
 import { Button, Grid } from 'semantic-ui-react';
-import _ from 'lodash';
 import ReservationsPanel from '../reservations-panel/reservations-panel.component';
 
-const ReservationsGrid = () => {
-    const columns = _.times(10, (i) => (
-        <Grid.Column key={i}>            
-            <ReservationsPanel>
-                <Button size='tiny' color='grey' inverted>#X - n seats</Button>
-            </ReservationsPanel>
-        </Grid.Column>
-      ))
+const ReservationsGrid = ( { tables }) => {
+    const [tablesDict, setTablesDict] = useState({});
+    const [maxIndex, setMaxIndex] = useState(0);
 
-    const rows = _.times(15, (i) => (
-        <Grid.Row key={i}>
-            {columns}
-        </Grid.Row>        
-    ))
+    useEffect((maxIndex) => {
+        let tbls = {};
+        let mindex = 0;
+        
+        for (var i = 1; i <= 15; i++) {
+            tbls[i] = {};
+            for (var j = 1; j <= 10; j++) {
+                tbls[i][j] = null;
+            }
+        }
+
+        tables.forEach(table => {
+            i = table.pos_x;
+            j = table.pos_y;
+            tbls[i][j] = table;
+            mindex = table.index > maxIndex && table.index;
+        })
+
+        setTablesDict(tbls);
+        setMaxIndex(mindex);
+
+    }, [tables]);
 
     return (    
         <Grid>
-            {rows}
+            { Object.entries(tablesDict).map( (value) =>
+                <Grid.Row key={value[0]}>
+                    { Object.entries(value[1]).map( (v) => 
+                        <Grid.Column key={v[0]}>                                        
+                            {/* <TableForm pos_x={value[0]} pos_y={v[0]} table={v[1]} maxIndex={maxIndex} handleCreate={handleCreateTable} handleUpdate={handleUpdateTable} handleDelete={handleDeleteTable}/> */}
+                            <ReservationsPanel>
+                                <Button size='tiny' color='blue' inverted>{v[1] ? `#${v[1].index} - ${v[1].seats} seats` : ''}</Button>
+                            </ReservationsPanel>
+                        </Grid.Column>                                         
+                    )}
+                </Grid.Row>
+            )}         
         </Grid>
     );
 };    
