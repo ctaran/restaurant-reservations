@@ -1,3 +1,4 @@
+from models.restaurant import RestaurantModel
 from models.user import UserModel
 from flask_restful import Resource, reqparse
 
@@ -50,6 +51,9 @@ class User(Resource):
 
         if user:
             try:
+                restaurant = RestaurantModel.get_by_manager_id(user.id)
+                RestaurantModel.delete_from_db(restaurant)
+                                
                 user.delete_from_db()
                 return {'message':'user deleted'}
             except Exception as err:

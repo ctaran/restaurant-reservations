@@ -1,3 +1,4 @@
+from models.user import UserModel
 from flask_restful import Resource, reqparse
 from models.restaurant import RestaurantModel
 
@@ -25,6 +26,9 @@ class Restaurant(Resource):
                 
         if RestaurantModel.get_by_name(data["name"]):
             return {'message': 'restaurant already exists'}, 400
+
+        if not UserModel.get_by_id(data["manager_id"]):
+            return {'message': 'manager {} does not exist'.format(data["manager_id"])}, 400
 
         restaurant = RestaurantModel(**data)
 
@@ -55,8 +59,12 @@ class RestaurantList(Resource):
 
         if args['manager_id']:
             manager_id = args['manager_id']
-            restaurant = RestaurantModel.get_by_manager_id(manager_id)[0]
-            # return {"restaurants":[restaurant.json() for restaurant in result]}
-            return {"restaurant": dict(restaurant.json(), **{ "tables" : [table.json() for table in restaurant.tables]})}
+            restaurant = RestaurantModel.get_by_manager_id(manager_id)
+            if restaurant:
+                return dict(restaurant.json(), **{ "tables" : [table.json() for table in restaurant.tables]})
+            else:
+                return {'message':'User {} has no restaurant defined'.format(manager_id)}, 404
         else:
-            return {"message": "Missing Manager ID"}, 400
+            #return {"message": "Missing Manager ID"}, 400
+            restaurants = RestaurantModel.get_all_restaurants()
+            return {"restaurants": [restaurant.json() for restaurant in restaurants]}

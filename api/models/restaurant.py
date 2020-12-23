@@ -14,7 +14,7 @@ class RestaurantModel(db.Model):
         self.manager_id = manager_id
     
     def json(self):
-        return {'id':self.id, 'name': self.name, 'manager':self.manager_id }
+        return {'id':self.id, 'name': self.name, 'manager_id':self.manager_id }
 
     @classmethod
     def get_by_id(cls, _id):
@@ -22,7 +22,7 @@ class RestaurantModel(db.Model):
 
     @classmethod
     def get_by_manager_id(cls, manager_id):
-        return cls.query.filter_by(manager_id = manager_id).all()
+        return cls.query.filter_by(manager_id = manager_id).first()
 
     @classmethod
     def get_by_name(cls, name):
