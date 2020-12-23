@@ -18,7 +18,7 @@ class Restaurant(Resource):
     def get(self, name):
         restaurant = RestaurantModel.get_by_name(name)
         if restaurant:
-            return restaurant.json()
+            return dict(restaurant.json(), **{ "tables" : [table.json() for table in restaurant.tables]})
         return {'message':'restaurant not found'}, 404
 
     def post(self):
