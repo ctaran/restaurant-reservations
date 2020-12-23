@@ -2,8 +2,8 @@ import React from 'react';
 import TablesGrid from './tables-grid/tables-grid.component';
 
 const Layout = ({ restaurant, handleCreateTable, handleUpdateTable, handleDeleteTable }) => {
-    const onCreateTable = (seats) => {
-        handleCreateTable(seats);
+    const onCreateTable = (pos_x, pos_y, seats) => {
+        handleCreateTable(pos_x, pos_y, seats);
     }
 
     const onUpdateTable = (id, pos_x, pos_y, seats) => {

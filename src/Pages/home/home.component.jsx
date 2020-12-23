@@ -26,9 +26,9 @@ class Home extends Component {
         this.updateRestaurant();
     }
 
-    onCreateTable(seats) {
+    onCreateTable(pos_x, pos_y, seats) {
         const restaurant_id = this.state.restaurant.id;       
-        tableService.createNew(5, 5, seats, restaurant_id)
+        tableService.createNew(pos_x, pos_y, seats, restaurant_id)
             .then(() => {
                 this.updateRestaurant();
             });

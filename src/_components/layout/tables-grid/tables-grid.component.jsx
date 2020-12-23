@@ -29,8 +29,8 @@ const TablesGrid = ( { tables, createTable, updateTable, deleteTable } ) => {
 
     }, [tables]);
 
-    const handleCreateTable = (seats) => {        
-        createTable(seats);
+    const handleCreateTable = (pos_x, pos_y, seats) => {        
+        createTable(pos_x, pos_y, seats);
     }
     
     const handleUpdateTable = (id, pos_x, pos_y, seats) => {
@@ -46,8 +46,8 @@ const TablesGrid = ( { tables, createTable, updateTable, deleteTable } ) => {
             { Object.entries(tablesDict).map( (value) =>
                 <Grid.Row key={value[0]}>
                     { Object.entries(value[1]).map( (v) => 
-                        <Grid.Column key={v[0]}>            
-                            <TableForm table={v[1]} maxIndex={maxIndex} handleCreate={handleCreateTable} handleUpdate={handleUpdateTable} handleDelete={handleDeleteTable}/>
+                        <Grid.Column key={v[0]}>                                        
+                            <TableForm pos_x={value[0]} pos_y={v[0]} table={v[1]} maxIndex={maxIndex} handleCreate={handleCreateTable} handleUpdate={handleUpdateTable} handleDelete={handleDeleteTable}/>
                         </Grid.Column>                                         
                     )}
                 </Grid.Row>
