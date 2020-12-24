@@ -4,8 +4,7 @@ import { Button, Segment } from 'semantic-ui-react';
 import * as Yup from 'yup';
 import { currentDateFormatted, getDateFormatted, getTimeFormatted } from '../../../_helpers';
 
-const ReservationForm = (props) => {
-    var reservation = props.reservation;
+const ReservationForm = ( { reservation, onSubmit, onClose }) => {    
 
     let initialVals = reservation ?
                                     {
@@ -31,12 +30,12 @@ const ReservationForm = (props) => {
             date: Yup.date().required('Date is required'),
             time: Yup.string().required('Time is required'),
             customerName: Yup.string().required('Customer name is required'),
-            customerEmail: Yup.string().required('Customer email is required'),
+            customerEmail: Yup.string().email().required('Customer email is required'),
             customerPhone: Yup.string().required('Customer phone is required')
         })}
         onSubmit={({ date, time, customerName, customerEmail, customerPhone }, { setStatus, setSubmitting }) => {
             setStatus();
-            props.onSubmit(date, time, customerName, customerEmail, customerPhone)
+            onSubmit(date, time, customerName, customerEmail, customerPhone)
                 .then(
                     error => {
                         setSubmitting(false);
@@ -44,9 +43,7 @@ const ReservationForm = (props) => {
                     }
                 );
         }}
-        onReset={() => {            
-            props.onClose();
-        }}
+        onReset={() => onClose()}
         render={({ errors, status, touched, isSubmitting }) => (
             <Form>
                 <Segment>
@@ -57,7 +54,21 @@ const ReservationForm = (props) => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="time">Time:</label>
-                        <Field name="time" type="text" className={'form-control' + (errors.time && touched.time ? ' is-invalid' : '')} />
+                        <Field name="time" className={'form-control' + (errors.time && touched.time ? ' is-invalid' : '')} as="select">
+                            <option value="11">11:00</option>
+                            <option value="12">12:00</option>
+                            <option value="13">13:00</option>                        
+                            <option value="14">14:00</option>
+                            <option value="15">15:00</option>
+                            <option value="16">16:00</option>
+                            <option value="17">17:00</option>
+                            <option value="18">18:00</option>
+                            <option value="19">19:00</option>
+                            <option value="20">20:00</option>
+                            <option value="21">21:00</option>
+                            <option value="22">22:00</option>
+                            <option value="23">23:00</option>
+                        </Field>
                         <ErrorMessage name="time" component="div" className="invalid-feedback" />
                     </div>
                     <div className="form-group">
@@ -67,7 +78,7 @@ const ReservationForm = (props) => {
                     </div>
                     <div className="form-group">
                         <label htmlFor="customerEmail">Customer email:</label>
-                        <Field name="customerEmail" type="text" className={'form-control' + (errors.customerEmail && touched.customerEmail ? ' is-invalid' : '')} />
+                        <Field name="customerEmail" type="email" className={'form-control' + (errors.customerEmail && touched.customerEmail ? ' is-invalid' : '')} />
                         <ErrorMessage name="customerEmail" component="div" className="invalid-feedback" />
                     </div>
                     <div className="form-group">

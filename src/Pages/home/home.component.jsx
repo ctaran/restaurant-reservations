@@ -6,6 +6,7 @@ import Reservations from '../../_components/reservations/reservations.component'
 import { authenticationService } from '../../_services';
 import { restaurantService } from '../../_services/restaurant.service';
 import { tableService } from '../../_services/table.service';
+import { reservationService } from '../../_services/reservation.service';
 
 class Home extends Component {
     constructor() {
@@ -44,6 +45,31 @@ class Home extends Component {
 
     onDeleteTable(id) {
         tableService.deleteByID(id)
+            .then(() => {
+                this.updateRestaurant();
+            });
+    }        
+
+    onCreateReservation(date, time, customerName, customerEmail, customerPhone) {
+        // combine date & time into date_time
+        // get table ID
+        reservationService.createNew(date, time, customerName, customerEmail, customerPhone)
+            .then(() => {
+                this.updateRestaurant();
+            });
+    }
+    
+    onUpdateReservation(id, date, time, customerName, customerEmail, customerPhone) {
+        // combine date & time into date_time
+        // get table ID
+        reservationService.updateByID(id, date, time, customerName, customerEmail, customerPhone )
+            .then(() => {
+                this.updateRestaurant();
+            });
+    }
+
+    onDeleteReservation(id) {
+        reservationService.deleteByID(id)
             .then(() => {
                 this.updateRestaurant();
             });
