@@ -10,7 +10,9 @@ class RestaurantTableModel(db.Model):
     seats = db.Column(db.Integer, nullable=False)    
 
     restaurant_id = db.Column(db.Integer, db.ForeignKey('restaurants.id'))
-    restaurant = db.relationship('RestaurantModel', back_populates='tables')    
+    restaurant = db.relationship('RestaurantModel', back_populates='tables')
+
+    reservations = db.relationship('ReservationModel', back_populates='table')
 
     def __init__(self, index, pos_x, pos_y, seats, restaurant_id):
         self.index = index

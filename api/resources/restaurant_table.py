@@ -76,6 +76,7 @@ class RestaurantTableList(Resource):
             restaurant_id = args['restaurant_id']
             result = RestaurantTableModel.get_by_restaurant_id(restaurant_id)
             return {"tables":[table.json() for table in result]}
+            # return {"tables":[ dict(table.json(), **{ "reservations" : [reservation.json() for reservation in table.reservations]}) for table in result]}
         else:
             return {"message": "Missing Restaurant ID"}, 400
 
