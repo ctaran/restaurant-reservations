@@ -3,12 +3,12 @@ import { Grid } from 'semantic-ui-react';
 import TableForm from '../table-form/table-form.component';
 
 const TablesGrid = ( { tables, createTable, updateTable, deleteTable } ) => {    
-    const [tablesDict, setTablesDict] = useState({});
+    const [tablesDict, setTablesDict] = useState(null);
     const [maxIndex, setMaxIndex] = useState(0);
 
-    useEffect((maxIndex) => {
+    useEffect(() => {
         let tbls = {};
-        let mindex = 0;
+        let midx = 0;
         
         for (var i = 1; i <= 15; i++) {
             tbls[i] = {};
@@ -21,11 +21,11 @@ const TablesGrid = ( { tables, createTable, updateTable, deleteTable } ) => {
             i = table.pos_x;
             j = table.pos_y;
             tbls[i][j] = table;
-            mindex = table.index > maxIndex && table.index;
+            midx = table.index > midx && table.index;
         })
 
         setTablesDict(tbls);
-        setMaxIndex(mindex);
+        setMaxIndex(midx);
 
     }, [tables]);
 
@@ -41,7 +41,8 @@ const TablesGrid = ( { tables, createTable, updateTable, deleteTable } ) => {
         deleteTable(id);
     }        
 
-    return (    
+    return (   
+        tablesDict && 
         <Grid>
             { Object.entries(tablesDict).map( (value) =>
                 <Grid.Row key={value[0]}>

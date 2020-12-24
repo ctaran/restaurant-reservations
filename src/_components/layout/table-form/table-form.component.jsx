@@ -1,15 +1,11 @@
 import React from 'react';
 import { Button, Form, Modal } from 'semantic-ui-react';
 
-function TableForm( { table, maxIndex, pos_x, pos_y, handleCreate, handleUpdate, handleDelete } ) {
-  
-    const [open, setOpen] = React.useState(false);
-    const [index, setIndex] = React.useState(
-      table ? table.index : maxIndex+1
-    )
+function TableForm( { table, maxIndex, pos_x, pos_y, handleCreate, handleUpdate, handleDelete } ) {  
+    const [open, setOpen] = React.useState(false);    
     const [seats, setSeats] = React.useState(
-      table ? table.seats : ''
-    );           
+                                table ? table.seats : ''
+                              );           
 
     const onSubmit = () => {            
       table ? handleUpdate(table.id, table.pos_x, table.pos_y, seats) : handleCreate(pos_x, pos_y, seats);
@@ -26,10 +22,10 @@ function TableForm( { table, maxIndex, pos_x, pos_y, handleCreate, handleUpdate,
         onClose={() => setOpen(false)}
         onOpen={() => setOpen(true)}
         open={open}
-        trigger={<Button size='tiny' color='green' inverted>{table && `#${index} - ${seats} seats`}</Button>}
+        trigger={<Button size='tiny' color='green' inverted>{table && `#${table.index} - ${table.seats} seats`}</Button>}
         style={{ position:'relative' }}
       >
-        <Modal.Header>Table {index}</Modal.Header>
+        <Modal.Header>{table ? `Table ${table.index}` : 'Add table'}</Modal.Header>
         <Modal.Content>          
           <Form onSubmit={onSubmit}>
             <Form.Input
