@@ -37,7 +37,8 @@ class Restaurant(Resource):
         except Exception as err:
             return {"message": "An error occurred inserting the restaurant - {}".format(err)}, 500
 
-        return restaurant.json(), 201
+        #return restaurant.json(), 201
+        return dict(restaurant.json(), **{ "tables" : [table.json() for table in restaurant.tables]}), 201
 
     def delete(self, name):
         restaurant = RestaurantModel.get_by_name(name)

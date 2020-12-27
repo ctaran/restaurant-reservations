@@ -24,6 +24,12 @@ class RestaurantTable(Resource):
         help="Every Table needs a restaurant id!"
     )
 
+    def get(self, id):
+        table = RestaurantTableModel.get_by_id(id)
+        if table:
+            return dict(table.json(), **{ "reservations" : [reservation.json() for reservation in table.reservations]})
+        return {'message':'restaurant not found'}, 404
+
     def post(self):
         data = RestaurantTable.parser.parse_args()
         index = RestaurantTableModel.get_next_table_index(data["restaurant_id"])

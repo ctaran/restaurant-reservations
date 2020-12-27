@@ -26,7 +26,6 @@ class Reservation(Resource):
     )
     parser.add_argument('table_id', 
         type=int,
-        required=True,
         help="Every Reservation needs a table id!"
     )
 
