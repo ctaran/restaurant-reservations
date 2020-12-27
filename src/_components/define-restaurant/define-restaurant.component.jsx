@@ -14,7 +14,7 @@ const DefineRestaurant = ( { handleSubmit } ) => {
     const userName = authenticationService.currentUserValue.name;
 
     return (
-        <Modal onOpen={() => setOpen(true)} open={open}
+        <Modal onOpen={() => setOpen(true)} open={open} style={{ position: 'relative'}}
             // trigger={<Button size='tiny' color='green' inverted>{table && `#${index} - ${seats} seats`}</Button>}
             >
             <Modal.Header>Hi {userName}! Please define your Restaurant details</Modal.Header>

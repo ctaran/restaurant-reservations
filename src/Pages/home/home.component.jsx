@@ -21,6 +21,9 @@ class Home extends Component {
         this.onDeleteTable = this.onDeleteTable.bind(this);
         this.createRestaurant = this.createRestaurant.bind(this);
         this.updateRestaurant = this.updateRestaurant.bind(this);
+        this.onCreateReservation = this.onCreateReservation.bind(this);
+        this.onUpdateReservation = this.onUpdateReservation.bind(this);
+        this.onDeleteReservation = this.onDeleteReservation.bind(this);
     }
 
     componentDidMount() {
@@ -50,19 +53,15 @@ class Home extends Component {
             });
     }        
 
-    onCreateReservation(date, time, customerName, customerEmail, customerPhone) {
-        // combine date & time into date_time
-        // get table ID
-        reservationService.createNew(date, time, customerName, customerEmail, customerPhone)
+    onCreateReservation(datetime, customerName, customerEmail, customerPhone, table_id) {
+        reservationService.createNew(datetime, customerName, customerEmail, customerPhone, table_id)
             .then(() => {
                 this.updateRestaurant();
             });
     }
     
-    onUpdateReservation(id, date, time, customerName, customerEmail, customerPhone) {
-        // combine date & time into date_time
-        // get table ID
-        reservationService.updateByID(id, date, time, customerName, customerEmail, customerPhone )
+    onUpdateReservation(id, datetime, customerName, customerEmail, customerPhone) {
+        reservationService.updateByID(id, datetime, customerName, customerEmail, customerPhone )
             .then(() => {
                 this.updateRestaurant();
             });
@@ -81,7 +80,7 @@ class Home extends Component {
         restaurantService.getByManagerID(manager_id)
             .then(
                 (data) => {
-                   this.setState({
+                    this.setState({
                        restaurant: data
                    });
                 },
@@ -101,10 +100,10 @@ class Home extends Component {
         
         restaurantService.createNew(name, manager_id)
             .then(
-                (data) => {                    
-                   this.setState({
-                       restaurant: data
-                   });
+                (data) => {    
+                    this.setState({
+                        restaurant: data
+                    });
                 },
                 (error) => {
                     console.log(error);
@@ -119,7 +118,10 @@ class Home extends Component {
         if (restaurant) {
             panes = [
                 { menuItem: 'Layout', render: () => <Layout restaurant={restaurant} handleCreateTable={this.onCreateTable} handleUpdateTable={this.onUpdateTable} handleDeleteTable={this.onDeleteTable}/> },
-                { menuItem: 'Reservations', render: () => <Reservations restaurant={restaurant}/> },
+                { menuItem: 'Reservations', render: () => <Reservations restaurant={restaurant} 
+                                                            handleCreateReservation={this.onCreateReservation} 
+                                                            handleUpdateReservation={this.onUpdateReservation}
+                                                            handleDeleteReservation={this.onDeleteReservation}/> },
             ]
         }
 

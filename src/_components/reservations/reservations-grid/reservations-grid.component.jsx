@@ -25,12 +25,12 @@ const ReservationsGrid = ( { tables, createReservation, updateReservation, delet
 
     }, [tables]);
 
-    const handleCreateReservation = (date, time, customerName, customerEmail, customerPhone) => {        
-        createReservation(date, time, customerName, customerEmail, customerPhone);
+    const handleCreateReservation = (datetime, customerName, customerEmail, customerPhone, table_id) => {        
+        createReservation(datetime, customerName, customerEmail, customerPhone, table_id);
     }
     
-    const handleUpdateReservation = (id, date, time, customerName, customerEmail, customerPhone) => {
-        updateReservation(id, date, time, customerName, customerEmail, customerPhone);
+    const handleUpdateReservation = (id, datetime, customerName, customerEmail, customerPhone) => { 
+        updateReservation(id, datetime, customerName, customerEmail, customerPhone);
     }
 
     const handleDeleteReservation = (id) => {
@@ -45,10 +45,10 @@ const ReservationsGrid = ( { tables, createReservation, updateReservation, delet
                     { Object.entries(value[1]).map( (v) => 
                         <Grid.Column key={v[0]}>                                        
                             {/* <TableForm pos_x={value[0]} pos_y={v[0]} table={v[1]} maxIndex={maxIndex} handleCreate={handleCreateTable} handleUpdate={handleUpdateTable} handleDelete={handleDeleteTable}/> */}
-                            <ReservationsPanel table={v[1]} 
+                            {v[1] && <ReservationsPanel table={v[1]} 
                                 handleCreate={handleCreateReservation} 
                                 handleUpdate={handleUpdateReservation} 
-                                handleDelete={handleDeleteReservation}/>
+                                handleDelete={handleDeleteReservation}/>}
                         </Grid.Column>                                         
                     )}
                 </Grid.Row>
