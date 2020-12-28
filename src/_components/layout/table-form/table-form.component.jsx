@@ -1,7 +1,15 @@
 import React from 'react';
+import { useDrag } from 'react-dnd';
+import { ItemTypes } from '../../../_helpers/drag-and-drop';
 import { Button, Form, Modal } from 'semantic-ui-react';
 
-function TableForm( { table, maxIndex, pos_x, pos_y, handleCreate, handleUpdate, handleDelete } ) {  
+const tableStyle = {
+  fontSize: 40,
+  fontWeight: 'bold',
+  cursor: 'move',
+};
+
+function TableForm( { table, pos_x, pos_y, handleCreate, handleUpdate, handleDelete } ) {  
     const [open, setOpen] = React.useState(false);    
     const [seats, setSeats] = React.useState(
                                 table ? table.seats : ''
@@ -17,30 +25,32 @@ function TableForm( { table, maxIndex, pos_x, pos_y, handleCreate, handleUpdate,
       setOpen(false);
     }
 
+    const [{ isDragging }, drag] = useDrag({
+      item: { type: ItemTypes.TABLE, id: table && table.id, seats: table && table.seats },
+      collect: (monitor) => ({
+          isDragging: !!monitor.isDragging(),
+      }),
+    });
+
     return (
-      <Modal
-        onClose={() => setOpen(false)}
-        onOpen={() => setOpen(true)}
-        open={open}
-        trigger={<Button size='tiny' color='green' inverted>{table && `#${table.index} - ${table.seats} seats`}</Button>}
-        style={{ position:'relative' }}
-      >
-        <Modal.Header>{table ? `Table ${table.index}` : 'Add table'}</Modal.Header>
-        <Modal.Content>          
-          <Form onSubmit={onSubmit}>
-            <Form.Input
-              placeholder='Number of seats'
-              label='Number of seats'
-              name='seats'
-              value={seats}
-              onChange={e => setSeats(e.target.value)}
-            />           
-            <Form.Button content='Submit' positive/>
-            <Button color='red' onClick={onDelete} disabled={!table}>Delete Table</Button>
-            <Button color='black' onClick={() => setOpen(false)}>Back</Button>
-          </Form>
-        </Modal.Content>
-      </Modal>
+      <>
+        <div ref={drag} style={{ ...tableStyle, opacity: isDragging ? 0.5 : 1, }}>
+          <Modal onClose={() => setOpen(false)} onOpen={() => setOpen(true)} open={open}
+            trigger={<Button size='tiny' color='green' inverted>{table && `#${table.index} - ${table.seats} seats`}</Button>}
+            style={{ position:'relative' }}
+          >
+            <Modal.Header>{table ? `Table ${table.index}` : 'Add table'}</Modal.Header>
+            <Modal.Content>          
+              <Form onSubmit={onSubmit}>
+                <Form.Input placeholder='Seats' label='Number of seats' name='seats' value={seats} onChange={e => setSeats(e.target.value)}/>           
+                <Form.Button content='Submit' positive/>
+                <Button color='red' onClick={onDelete} disabled={!table}>Delete Table</Button>
+                <Button color='black' onClick={() => setOpen(false)}>Back</Button>
+              </Form>
+            </Modal.Content>
+          </Modal>
+        </div>
+      </>
     )
 }
 

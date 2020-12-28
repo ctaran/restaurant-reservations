@@ -1,34 +1,17 @@
-import React, { useEffect, useState } from 'react';
-import { Grid } from 'semantic-ui-react';
+import React from 'react';
 import TableForm from '../table-form/table-form.component';
+import TablesGridSquare from './tables-grid-square.component';
+
+const tablesGridStyle = {
+    width: '100%',
+    height: '100%',
+    display: 'flex',
+    flexWrap: 'wrap',
+};
+
+const squareStyle = { width: '10%', minWidth:'40px' , height: '6.6%', minHeight: '40px' };
 
 const TablesGrid = ( { tables, createTable, updateTable, deleteTable } ) => {    
-    const [tablesDict, setTablesDict] = useState(null);
-    const [maxIndex, setMaxIndex] = useState(0);
-
-    useEffect(() => {
-        let tbls = {};
-        let midx = 0;
-        
-        for (var i = 1; i <= 15; i++) {
-            tbls[i] = {};
-            for (var j = 1; j <= 10; j++) {
-                tbls[i][j] = null;
-            }
-        }
-
-        tables.forEach(table => {
-            i = table.pos_x;
-            j = table.pos_y;
-            tbls[i][j] = table;
-            midx = table.index > midx && table.index;
-        })
-
-        setTablesDict(tbls);
-        setMaxIndex(midx);
-
-    }, [tables]);
-
     const handleCreateTable = (pos_x, pos_y, seats) => {        
         createTable(pos_x, pos_y, seats);
     }
@@ -39,22 +22,47 @@ const TablesGrid = ( { tables, createTable, updateTable, deleteTable } ) => {
 
     const handleDeleteTable = (id) => {
         deleteTable(id);
-    }        
+    }                
+    
+    const squares = [];    
+    const tablePositions = [];
+    let maxIndex = 0;
+        
+    function renderSquare(i, j) {
+        const key = "9" + i.toString() + j.toString();
 
+        return (
+            <div key={key} style={squareStyle}>
+                <TablesGridSquare existingTables={tablePositions} x={i} y={j} handleMoveTable={handleUpdateTable}>
+                    <TableForm pos_x={i} pos_y={j} table={tablePositions[i][j]} maxIndex={maxIndex} 
+                        handleCreate={handleCreateTable} handleUpdate={handleUpdateTable} handleDelete={handleDeleteTable}/>
+                </TablesGridSquare>
+            </div>);
+    }    
+
+    for (let i = 0; i < 15; i++) {
+        tablePositions[i] = [];
+        for (let j = 0; j < 10; j++) {
+            tablePositions[i][j] = null;
+        }
+    }
+
+    tables.forEach(table => {
+        const i = table.pos_x;
+        const j = table.pos_y;
+        tablePositions[i][j] = table;
+        maxIndex = table.index > maxIndex && table.index;
+    })  
+
+    for (let i = 0; i < 15; i++) {
+        for (let j = 0; j < 10; j++) {
+            squares.push(renderSquare(i, j));
+        }
+    }               
+    
     return (   
-        tablesDict && 
-        <Grid>
-            { Object.entries(tablesDict).map( (value) =>
-                <Grid.Row key={value[0]}>
-                    { Object.entries(value[1]).map( (v) => 
-                        <Grid.Column key={v[0]}>                                        
-                            <TableForm pos_x={value[0]} pos_y={v[0]} table={v[1]} maxIndex={maxIndex} handleCreate={handleCreateTable} handleUpdate={handleUpdateTable} handleDelete={handleDeleteTable}/>
-                        </Grid.Column>                                         
-                    )}
-                </Grid.Row>
-            )}         
-        </Grid>
-    );
-};    
+        <div style={tablesGridStyle}>{squares}</div>
+    );    
+};   
 
 export default TablesGrid;

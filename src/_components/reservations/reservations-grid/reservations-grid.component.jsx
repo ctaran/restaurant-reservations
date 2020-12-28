@@ -8,9 +8,9 @@ const ReservationsGrid = ( { tables, createReservation, updateReservation, delet
     useEffect(() => {
         let tbls = {};        
         
-        for (var i = 1; i <= 15; i++) {
+        for (var i = 0; i < 15; i++) {
             tbls[i] = {};
-            for (var j = 1; j <= 10; j++) {
+            for (var j = 0; j < 10; j++) {
                 tbls[i][j] = null;
             }
         }

@@ -1,4 +1,6 @@
 import React from 'react';
+import { DndProvider } from 'react-dnd'
+import { HTML5Backend } from 'react-dnd-html5-backend'
 import TablesGrid from './tables-grid/tables-grid.component';
 
 const Layout = ({ restaurant, handleCreateTable, handleUpdateTable, handleDeleteTable }) => {
@@ -17,7 +19,9 @@ const Layout = ({ restaurant, handleCreateTable, handleUpdateTable, handleDelete
     return (
     <div>
         <h1>Table Layout</h1>
-        <TablesGrid tables={restaurant.tables} createTable={onCreateTable} updateTable={onUpdateTable} deleteTable={onDeleteTable}/>
+        <DndProvider backend={HTML5Backend}>
+            <TablesGrid tables={restaurant.tables} createTable={onCreateTable} updateTable={onUpdateTable} deleteTable={onDeleteTable}/>
+        </DndProvider>
     </div>
     );
 }
