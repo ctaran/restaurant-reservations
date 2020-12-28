@@ -1,5 +1,6 @@
 import React, { useEffect } from 'react';
 import { Button, Modal } from 'semantic-ui-react';
+import PastFutureRadios from '../../../_elements/past-future-radios.component';
 import { reservationService } from '../../../_services/reservation.service';
 import ReservationForm from '../reservation-form/reservation-form.component';
 import ReservationList from '../reservation-list/reservation-list.component';
@@ -7,6 +8,7 @@ import ReservationList from '../reservation-list/reservation-list.component';
 function ReservationsPanel( { table, handleCreate, handleUpdate, handleDelete }) {
     const [reservations, setReservations] = React.useState([]);
     const [selectedReservation, setSelectedReservation] = React.useState(null);
+    const [futureReservations, setFutureReservations] = React.useState(true);
     const [reservationsOpen, setReservationsOpen] = React.useState(false);
     const [addOpen, setAddOpen] = React.useState(false);
     const [editOpen, setEditOpen] = React.useState(false);
@@ -38,18 +40,28 @@ function ReservationsPanel( { table, handleCreate, handleUpdate, handleDelete })
         setSelectedReservation(reservation);
         setEditOpen(true);
     }
+    
+    const handlePastFutureToggle = (value) => {
+        if (value === 'future') {
+            setFutureReservations(true);
+        }
+        else {
+            setFutureReservations(false);
+        }
+    }
 
     return (               
         <Modal onClose={() => setReservationsOpen(false)} onOpen={() => setReservationsOpen(true)} open={reservationsOpen} style={{ position: 'relative'}}
                 trigger={<Button size='tiny' color='blue' inverted>{table ? `#${table.index} - ${table.seats} seats` : ''}</Button>}>
         <Modal.Header>Reservations for Table {table.index}</Modal.Header>
         <Modal.Content image>
-            <ReservationList reservations={table && reservations} handleClick={handleReservationClick}/>                    
+            <ReservationList future={futureReservations} reservations={table && reservations} handleClick={handleReservationClick}/>                    
         </Modal.Content>
         <Modal.Actions>
             <Button onClick={() => setAddOpen(true)} primary>Add Reservation</Button>
             <Button color='black' onClick={() => setReservationsOpen(false)}>Back</Button>
-        </Modal.Actions>              
+        </Modal.Actions>
+            <PastFutureRadios onToggle={handlePastFutureToggle}/>
             <Modal onClose={() => setAddOpen(false)} open={addOpen} size='small' style={{ position: 'relative'}}>
                 <Modal.Header>Add new reservation</Modal.Header>
                     <Modal.Content>

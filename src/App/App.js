@@ -8,7 +8,7 @@ import Register from '../Pages/register/register.component';
 import Home from '../Pages/home/home.component';
 
 import { authenticationService } from '../_services';
-import { PrivateRoute } from '../_components';
+import { PrivateRoute } from '../_elements';
 
 class App extends Component {
   constructor(props) {
