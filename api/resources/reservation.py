@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import date, datetime
 from models.reservation import ReservationModel
 from flask_restful import Resource, reqparse
 
@@ -78,14 +78,20 @@ class ReservationList(Resource):
 
     parser = reqparse.RequestParser()
     parser.add_argument('table_id', type=int)
+    parser.add_argument('date', type=str)
 
     def get(self):
 
-        args = ReservationList.parser.parse_args()        
-
+        args = ReservationList.parser.parse_args()   
+                 
         if args['table_id']:
             table_id = args['table_id']
             result = ReservationModel.get_by_table_id(table_id)
+            
+            if args['date']:
+                date = args['date']
+                return {"reservations":[reservation.json() for reservation in result if date in str(reservation.date_time)]}
+
             return {"reservations":[reservation.json() for reservation in result]}
         else:
             return {"message": "Missing Table ID"}, 400
