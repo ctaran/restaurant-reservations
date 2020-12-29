@@ -2,15 +2,6 @@ import React from 'react';
 import TableForm from '../table-form/table-form.component';
 import TablesGridSquare from './tables-grid-square.component';
 
-const tablesGridStyle = {
-    width: '100%',
-    height: '100%',
-    display: 'flex',
-    flexWrap: 'wrap',
-};
-
-const squareStyle = { width: '10%', minWidth:'40px' , height: '6.6%', minHeight: '40px' };
-
 const TablesGrid = ( { tables, createTable, updateTable, deleteTable } ) => {    
     const handleCreateTable = (pos_x, pos_y, seats) => {        
         createTable(pos_x, pos_y, seats);
@@ -32,7 +23,7 @@ const TablesGrid = ( { tables, createTable, updateTable, deleteTable } ) => {
         const key = "9" + i.toString() + j.toString();
 
         return (
-            <div key={key} style={squareStyle}>
+            <div key={key} className="grid-item">
                 <TablesGridSquare existingTables={tablePositions} x={i} y={j} handleMoveTable={handleUpdateTable}>
                     <TableForm pos_x={i} pos_y={j} table={tablePositions[i][j]} maxIndex={maxIndex} 
                         handleCreate={handleCreateTable} handleUpdate={handleUpdateTable} handleDelete={handleDeleteTable}/>
@@ -61,7 +52,7 @@ const TablesGrid = ( { tables, createTable, updateTable, deleteTable } ) => {
     }               
     
     return (   
-        <div style={tablesGridStyle}>{squares}</div>
+        <div className="grid-container">{squares}</div>
     );    
 };   
 

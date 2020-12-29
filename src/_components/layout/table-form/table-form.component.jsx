@@ -4,9 +4,7 @@ import { ItemTypes } from '../../../_helpers/drag-and-drop';
 import { Button, Form, Modal } from 'semantic-ui-react';
 
 const tableStyle = {
-  fontSize: 40,
-  fontWeight: 'bold',
-  cursor: 'move',
+  cursor: 'move'
 };
 
 function TableForm( { table, pos_x, pos_y, handleCreate, handleUpdate, handleDelete } ) {  
@@ -36,16 +34,19 @@ function TableForm( { table, pos_x, pos_y, handleCreate, handleUpdate, handleDel
       <>
         <div ref={drag} style={{ ...tableStyle, opacity: isDragging ? 0.5 : 1, }}>
           <Modal onClose={() => setOpen(false)} onOpen={() => setOpen(true)} open={open}
-            trigger={<Button size='tiny' color='green' inverted>{table && `#${table.index} - ${table.seats} seats`}</Button>}
-            style={{ position:'relative' }}
+            trigger={table ? <Button color='green' inverted>{table ? `#${table.index} - ${table.seats} seats` : ''}</Button>
+                          : <Button color='gray' className="button-no-table"></Button>}
+            style={{ position:'relative', maxWidth:'600px' }}
           >
             <Modal.Header>{table ? `Table ${table.index}` : 'Add table'}</Modal.Header>
             <Modal.Content>          
               <Form onSubmit={onSubmit}>
-                <Form.Input placeholder='Seats' label='Number of seats' name='seats' value={seats} onChange={e => setSeats(e.target.value)}/>           
-                <Form.Button content='Submit' positive/>
-                <Button color='red' onClick={onDelete} disabled={!table}>Delete Table</Button>
-                <Button color='black' onClick={() => setOpen(false)}>Back</Button>
+                <Form.Input placeholder='Seats' label='Number of seats' name='seats' value={seats} onChange={e => setSeats(e.target.value)}/>
+                <div align="right">      
+                  <Button content='Submit' positive/>
+                  {table && <Button color='red' onClick={onDelete}>Delete Table</Button>}
+                  <Button color='black' onClick={() => setOpen(false)}>Back</Button>
+                </div>
               </Form>
             </Modal.Content>
           </Modal>

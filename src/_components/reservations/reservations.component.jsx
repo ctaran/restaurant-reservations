@@ -17,8 +17,10 @@ const Reservations = ({ restaurant, handleCreateReservation, handleUpdateReserva
     
     return (
         <div>
-            <h1>Manage Reservations</h1>
-            <ReservationReport tables={restaurant.tables}/>
+            <div className='reservations-header'>
+                <h2>Manage Reservations</h2>
+                <ReservationReport tables={restaurant.tables}/>
+            </div>
             <ReservationsGrid tables={restaurant.tables} 
                             createReservation={onCreateReservation} 
                             updateReservation={onUpdateReservation} 

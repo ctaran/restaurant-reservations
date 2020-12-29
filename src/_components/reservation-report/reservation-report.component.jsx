@@ -1,8 +1,7 @@
 import React from 'react';
 import { ErrorMessage, Field, Form, Formik } from 'formik';
-import { Button, Segment } from 'semantic-ui-react';
+import { Button } from 'semantic-ui-react';
 import * as Yup from 'yup';
-import { getDateFormatted } from '../../_helpers';
 import { reservationService } from '../../_services/reservation.service';
 
 class ReservationReport extends React.Component {
@@ -117,14 +116,14 @@ class ReservationReport extends React.Component {
                 initialValues={new Date()}
                 validationSchema={Yup.object().shape({
                 date: Yup.date().required('Date is required')})}
-                onSubmit={({ date }, { setStatus, setSubmitting }) => {                            
+                onSubmit={({ date }, { setSubmitting }) => {                            
                    this.generateReport(this.props.tables, date);
                    setSubmitting(false);
                 }}
-                render={({ errors, status, touched, isSubmitting, handleChange, setFieldValue }) => (
+                render={({ errors, status, touched, isSubmitting }) => (
                 <Form style={{ display: 'flex' }}>
-                    <div className="form-group">                        
-                        <Field name="date" type="date" className={'form-control' + (errors.date && touched.date ? ' is-invalid' : '')}/>
+                    <div className="form-group report-date">                        
+                        <Field name="date" type="date" className={'form-control' + (errors.date ? ' is-invalid' : '')}/>
                         <ErrorMessage name="date" component="div" className="invalid-feedback" />
                     </div>                        
                     <div className="form-group">

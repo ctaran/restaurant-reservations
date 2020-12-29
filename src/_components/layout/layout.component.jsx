@@ -18,7 +18,7 @@ const Layout = ({ restaurant, handleCreateTable, handleUpdateTable, handleDelete
 
     return (
     <div>
-        <h1>Table Layout</h1>
+        <h2>Table Layout</h2>
         <DndProvider backend={HTML5Backend}>
             <TablesGrid tables={restaurant.tables} createTable={onCreateTable} updateTable={onUpdateTable} deleteTable={onDeleteTable}/>
         </DndProvider>

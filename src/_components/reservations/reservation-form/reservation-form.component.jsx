@@ -1,8 +1,8 @@
-import { ErrorMessage, Field, Form, Formik, useFormikContext } from 'formik';
-import React, { useEffect } from 'react';
+import { ErrorMessage, Field, Form, Formik } from 'formik';
+import React from 'react';
 import { Button, Segment } from 'semantic-ui-react';
 import * as Yup from 'yup';
-import { currentDateFormatted, getDateFormatted, getTimeFormatted } from '../../../_helpers';
+import { getDateFormatted, getTimeFormatted } from '../../../_helpers';
 import { reservationService } from '../../../_services/reservation.service';
 
 const timeSlots = ["12:00","13:00","14:00","15:00","16:00","17:00","18:00","19:00","20:00","21:00","22:00"]
@@ -70,7 +70,7 @@ const ReservationForm = ( { reservation, onSubmit, onDelete, onClose, tableID })
                         <div className="form-group">
                             <label htmlFor="time">Time:</label>
                             <Field name="time" className={'form-control' + (errors.time && touched.time ? ' is-invalid' : '')} as="select">
-                                {timeOptions.map((time, index) => (
+                                {timeOptions.map((time) => (
                                     <option key={time} value={time}>
                                     {time}
                                     </option>
@@ -94,12 +94,12 @@ const ReservationForm = ( { reservation, onSubmit, onDelete, onClose, tableID })
                             <ErrorMessage name="customerPhone" component="div" className="invalid-feedback" />
                         </div>
                     </Segment>      
-                    <div className="form-group">
+                    <div className="form-group" align="right">
                         <Button type="submit" primary disabled={isSubmitting}>Submit</Button>
                         {isSubmitting &&
                             <img alt="No img" src="data:image/gif;base64,R0lGODlhEAAQAPIAAP///wAAAMLCwkJCQgAAAGJiYoKCgpKSkiH/C05FVFNDQVBFMi4wAwEAAAAh/hpDcmVhdGVkIHdpdGggYWpheGxvYWQuaW5mbwAh+QQJCgAAACwAAAAAEAAQAAADMwi63P4wyklrE2MIOggZnAdOmGYJRbExwroUmcG2LmDEwnHQLVsYOd2mBzkYDAdKa+dIAAAh+QQJCgAAACwAAAAAEAAQAAADNAi63P5OjCEgG4QMu7DmikRxQlFUYDEZIGBMRVsaqHwctXXf7WEYB4Ag1xjihkMZsiUkKhIAIfkECQoAAAAsAAAAABAAEAAAAzYIujIjK8pByJDMlFYvBoVjHA70GU7xSUJhmKtwHPAKzLO9HMaoKwJZ7Rf8AYPDDzKpZBqfvwQAIfkECQoAAAAsAAAAABAAEAAAAzMIumIlK8oyhpHsnFZfhYumCYUhDAQxRIdhHBGqRoKw0R8DYlJd8z0fMDgsGo/IpHI5TAAAIfkECQoAAAAsAAAAABAAEAAAAzIIunInK0rnZBTwGPNMgQwmdsNgXGJUlIWEuR5oWUIpz8pAEAMe6TwfwyYsGo/IpFKSAAAh+QQJCgAAACwAAAAAEAAQAAADMwi6IMKQORfjdOe82p4wGccc4CEuQradylesojEMBgsUc2G7sDX3lQGBMLAJibufbSlKAAAh+QQJCgAAACwAAAAAEAAQAAADMgi63P7wCRHZnFVdmgHu2nFwlWCI3WGc3TSWhUFGxTAUkGCbtgENBMJAEJsxgMLWzpEAACH5BAkKAAAALAAAAAAQABAAAAMyCLrc/jDKSatlQtScKdceCAjDII7HcQ4EMTCpyrCuUBjCYRgHVtqlAiB1YhiCnlsRkAAAOwAAAAAAAAAAAA==" />
                         }
-                        <Button onClick={onDelete} negative>Delete</Button>
+                        {reservation && <Button onClick={onDelete} negative>Delete</Button>}
                         <Button type="reset" secondary>Close</Button>                   
                     </div>                
                     {status &&

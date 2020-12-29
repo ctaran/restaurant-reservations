@@ -85,11 +85,6 @@ class Home extends Component {
                    });
                 },
                 (error) => {
-                    // if ([404].indexOf(error.status) !== -1) {
-                    //     this.setState({                            
-                    //         restaurantAssociated: false
-                    //     });
-                    // }
                     console.log("message" + error.message);
                 }
             )
@@ -130,8 +125,8 @@ class Home extends Component {
                 <div className="row">
                     <div className="col"></div>
                     <div className="col-12">
-                        <h1>=== {restaurant.name} ===</h1>
-                        <h2>Manager: {authenticationService.currentUserValue.name}</h2>
+                        <p className="restaurant-name">=== {restaurant.name} ===</p>
+                        <h3>Manager: {authenticationService.currentUserValue.name}</h3>
                         <Tab panes={panes} menu={{ pointing: true }} />
                     </div>
                     <div className="col"></div>
