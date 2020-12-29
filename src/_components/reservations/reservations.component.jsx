@@ -1,4 +1,5 @@
 import React from 'react';
+import ReservationReport from '../reservation-report/reservation-report.component';
 import ReservationsGrid from './reservations-grid/reservations-grid.component';
 
 const Reservations = ({ restaurant, handleCreateReservation, handleUpdateReservation, handleDeleteReservation }) => {
@@ -17,6 +18,7 @@ const Reservations = ({ restaurant, handleCreateReservation, handleUpdateReserva
     return (
         <div>
             <h1>Manage Reservations</h1>
+            <ReservationReport tables={restaurant.tables}/>
             <ReservationsGrid tables={restaurant.tables} 
                             createReservation={onCreateReservation} 
                             updateReservation={onUpdateReservation} 
