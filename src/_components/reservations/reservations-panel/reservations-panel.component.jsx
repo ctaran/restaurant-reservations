@@ -65,13 +65,13 @@ function ReservationsPanel( { table, handleCreate, handleUpdate, handleDelete })
             <Modal onClose={() => setAddOpen(false)} open={addOpen} size='small' style={{ position: 'relative'}}>
                 <Modal.Header>Add new reservation</Modal.Header>
                     <Modal.Content>
-                        <ReservationForm onSubmit={onCreate} onClose={() => setAddOpen(false)}/>
+                        <ReservationForm tableID={table.id} onSubmit={onCreate} onClose={() => setAddOpen(false)}/>
                     </Modal.Content>                   
             </Modal>
             <Modal onClose={() => setEditOpen(false)} open={editOpen} size='small' style={{ position: 'relative'}}>
                 <Modal.Header>Update reservation</Modal.Header>
                     <Modal.Content>
-                        <ReservationForm reservation={selectedReservation} onSubmit={onUpdate} onDelete={() => setDeleteOpen(true)} onClose={() => setEditOpen(false)}/>
+                        <ReservationForm reservation={selectedReservation} tableID={table.id} onSubmit={onUpdate} onDelete={() => setDeleteOpen(true)} onClose={() => setEditOpen(false)}/>
                     </Modal.Content>                         
             </Modal>                
             <Modal onClose={() => setDeleteOpen(false)} open={deleteOpen} size='small' style={{ position: 'relative'}}>

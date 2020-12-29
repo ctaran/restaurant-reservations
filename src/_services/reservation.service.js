@@ -2,6 +2,7 @@ import { authHeader, handleResponse } from '../_helpers';
 
 export const reservationService = {    
     getByTableID,
+    getByTableIDandDate,
     createNew,
     deleteByID,
     updateByID
@@ -9,6 +10,14 @@ export const reservationService = {
 
 async function getByTableID(table_id) {
     const params = { table_id: table_id };
+    const url = "/api/reservations?" + Object.keys(params).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&')
+    const requestOptions = { method: 'GET', headers: authHeader() };
+    const response = await fetch(url, requestOptions);
+    return handleResponse(response);
+}
+
+async function getByTableIDandDate(table_id, date) {
+    const params = { table_id: table_id, date: date };
     const url = "/api/reservations?" + Object.keys(params).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&')
     const requestOptions = { method: 'GET', headers: authHeader() };
     const response = await fetch(url, requestOptions);

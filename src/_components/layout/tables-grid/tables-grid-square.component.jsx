@@ -1,6 +1,5 @@
 import React from 'react';
 import { useDrop } from 'react-dnd';
-import { Square } from './square.component';
 import { moveTable, ItemTypes, Overlay } from '../../../_helpers/drag-and-drop';
 
 const TablesGridSquare = ({ existingTables, x, y, children, handleMoveTable }) => {   
