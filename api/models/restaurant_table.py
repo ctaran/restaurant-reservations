@@ -14,12 +14,15 @@ class RestaurantTableModel(db.Model):
 
     reservations = db.relationship('ReservationModel', back_populates='table')
 
-    def __init__(self, index, pos_x, pos_y, seats, restaurant_id):
+    manager_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+
+    def __init__(self, index, pos_x, pos_y, seats, restaurant_id, manager_id):
         self.index = index
         self.pos_x = pos_x
         self.pos_y = pos_y
         self.seats = seats
         self.restaurant_id = restaurant_id
+        self.manager_id = manager_id
     
     def json(self):
         return {
@@ -28,20 +31,21 @@ class RestaurantTableModel(db.Model):
             'pos_x': self.pos_x, 
             'pos_y': self.pos_y, 
             'seats': self.seats, 
-            'restaurant_id': self.restaurant_id
+            'restaurant_id': self.restaurant_id,
+            'manager_id': self.manager_id
         }
 
     @classmethod
-    def get_by_id(cls, id):
-        return cls.query.filter_by(id=id).first() 
+    def get_by_id(cls, id, manager_id):
+        return cls.query.filter_by(id=id, manager_id=manager_id).first() 
 
     @classmethod
-    def get_by_restaurant_id(cls, restaurant_id):
-        return cls.query.filter_by(restaurant_id=restaurant_id).all()
+    def get_by_restaurant_id(cls, restaurant_id, manager_id):
+        return cls.query.filter_by(restaurant_id=restaurant_id, manager_id=manager_id).all()
 
     @classmethod
-    def get_next_table_index(cls, restaurant_id):
-        table = cls.query.filter_by(restaurant_id=restaurant_id).order_by(cls.index.desc()).first()
+    def get_next_table_index(cls, restaurant_id, manager_id):
+        table = cls.query.filter_by(restaurant_id=restaurant_id, manager_id=manager_id).order_by(cls.index.desc()).first()
         if table:        
             return table.index + 1
         else:

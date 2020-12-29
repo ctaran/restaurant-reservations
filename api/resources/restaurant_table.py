@@ -1,4 +1,5 @@
 from models.restaurant_table import RestaurantTableModel
+from flask import request
 from flask_restful import Resource, reqparse
 
 class RestaurantTable(Resource):
@@ -23,16 +24,21 @@ class RestaurantTable(Resource):
         required=True,
         help="Every Table needs a restaurant id!"
     )
+    parser.add_argument('manager_id', 
+        type=int,
+        required=True,
+        help="Every Table needs a restaurant id!"
+    )
 
-    def get(self, id):
-        table = RestaurantTableModel.get_by_id(id)
+    def get(self, id):        
+        table = RestaurantTableModel.get_by_id(id, request.args["manager_id"])
         if table:
             return dict(table.json(), **{ "reservations" : [reservation.json() for reservation in table.reservations]})
         return {'message':'restaurant not found'}, 404
 
     def post(self):
         data = RestaurantTable.parser.parse_args()
-        index = RestaurantTableModel.get_next_table_index(data["restaurant_id"])
+        index = RestaurantTableModel.get_next_table_index(data["restaurant_id"], data["manager_id"])
         table = RestaurantTableModel(index,**data)
         
         try:
@@ -43,7 +49,7 @@ class RestaurantTable(Resource):
         return table.json(), 201
 
     def delete(self, id):
-        table = RestaurantTableModel.get_by_id(id)
+        table = RestaurantTableModel.get_by_id(id, request.args["manager_id"])
 
         if table:
             table.delete_from_db()
@@ -53,7 +59,7 @@ class RestaurantTable(Resource):
         
     def put(self, id):
         data = RestaurantTable.parser.parse_args()
-        table = RestaurantTableModel.get_by_id(id)
+        table = RestaurantTableModel.get_by_id(id, data["manager_id"])
 
         if table:
                 table.pos_x = data["pos_x"]
@@ -73,18 +79,23 @@ class RestaurantTableList(Resource):
 
     parser = reqparse.RequestParser()
     parser.add_argument('restaurant_id', type=int)
+    parser.add_argument('manager_id', type=int)
 
     def get(self):
 
-        args = RestaurantTableList.parser.parse_args()        
+        args = RestaurantTableList.parser.parse_args() 
 
-        if args['restaurant_id']:
-            restaurant_id = args['restaurant_id']
-            result = RestaurantTableModel.get_by_restaurant_id(restaurant_id)
-            return {"tables":[table.json() for table in result]}
-            # return {"tables":[ dict(table.json(), **{ "reservations" : [reservation.json() for reservation in table.reservations]}) for table in result]}
+        if args["manager_id"]:
+            manager_id = args["manager_id"]       
+
+            if args['restaurant_id']:
+                restaurant_id = args['restaurant_id']
+                result = RestaurantTableModel.get_by_restaurant_id(restaurant_id, manager_id)
+                return {"tables":[table.json() for table in result]}
+            else:
+                return {"message": "Missing Restaurant ID"}, 400
         else:
-            return {"message": "Missing Restaurant ID"}, 400
+            return {"message": "Missing Manager ID"}, 400
 
          
 
