@@ -1,6 +1,7 @@
 from datetime import date, datetime
 from models.reservation import ReservationModel
 from flask_restful import Resource, reqparse
+from flask_jwt import jwt_required
 
 class Reservation(Resource):
     parser = reqparse.RequestParser()
@@ -29,6 +30,7 @@ class Reservation(Resource):
         help="Every Reservation needs a table id!"
     )
 
+    @jwt_required()
     def post(self):
         data = Reservation.parser.parse_args()
 
@@ -46,6 +48,7 @@ class Reservation(Resource):
 
         return reservation.json(), 201
 
+    @jwt_required()
     def delete(self, id):
         reservation = ReservationModel.get_by_id(id)
 
@@ -55,6 +58,7 @@ class Reservation(Resource):
 
         return {'message':'No table with id {} exists'.format(id)}, 404
         
+    @jwt_required()
     def put(self, id):
         data = Reservation.parser.parse_args()
         reservation = ReservationModel.get_by_id(id)
@@ -80,6 +84,7 @@ class ReservationList(Resource):
     parser.add_argument('table_id', type=int)
     parser.add_argument('date', type=str)
 
+    @jwt_required()
     def get(self):
 
         args = ReservationList.parser.parse_args()   

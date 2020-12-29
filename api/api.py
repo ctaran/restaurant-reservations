@@ -30,12 +30,6 @@ def customized_response_handler(access_token, identity):
                         'email': identity.email                        
                    })
 
-# @jwt.jwt_decode_handler
-# def jwt_decode_handler(access_token):
-#     secret = app.config['SECRET_KEY']
-#     decoded = jwt_lib.decode(access_token, secret)
-#     return decoded
-
 initialize_routes(api)
 
 if __name__ == "__main__":

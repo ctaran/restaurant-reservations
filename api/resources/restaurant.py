@@ -1,4 +1,5 @@
 from models.user import UserModel
+from flask_jwt import jwt_required
 from flask_restful import Resource, reqparse
 from models.restaurant import RestaurantModel
 
@@ -15,12 +16,14 @@ class Restaurant(Resource):
         help="Name cannot be left blank!"
     )
 
+    @jwt_required()
     def get(self, name):
         restaurant = RestaurantModel.get_by_name(name)
         if restaurant:
             return dict(restaurant.json(), **{ "tables" : [table.json() for table in restaurant.tables]})
         return {'message':'restaurant not found'}, 404
 
+    @jwt_required()
     def post(self):
         data = Restaurant.parser.parse_args()
                 
@@ -40,6 +43,7 @@ class Restaurant(Resource):
         #return restaurant.json(), 201
         return dict(restaurant.json(), **{ "tables" : [table.json() for table in restaurant.tables]}), 201
 
+    @jwt_required()
     def delete(self, name):
         restaurant = RestaurantModel.get_by_name(name)
 
@@ -54,6 +58,7 @@ class RestaurantList(Resource):
     parser = reqparse.RequestParser()
     parser.add_argument('manager_id', type=int)
 
+    @jwt_required()
     def get(self):
 
         args = RestaurantList.parser.parse_args()        

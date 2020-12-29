@@ -1,5 +1,6 @@
 from models.restaurant_table import RestaurantTableModel
 from flask import request
+from flask_jwt import jwt_required
 from flask_restful import Resource, reqparse
 
 class RestaurantTable(Resource):
@@ -27,15 +28,17 @@ class RestaurantTable(Resource):
     parser.add_argument('manager_id', 
         type=int,
         required=True,
-        help="Every Table needs a restaurant id!"
+        help="Every Table needs a manager id!"
     )
 
+    @jwt_required()
     def get(self, id):        
         table = RestaurantTableModel.get_by_id(id, request.args["manager_id"])
         if table:
             return dict(table.json(), **{ "reservations" : [reservation.json() for reservation in table.reservations]})
         return {'message':'restaurant not found'}, 404
 
+    @jwt_required()
     def post(self):
         data = RestaurantTable.parser.parse_args()
         index = RestaurantTableModel.get_next_table_index(data["restaurant_id"], data["manager_id"])
@@ -48,6 +51,7 @@ class RestaurantTable(Resource):
 
         return table.json(), 201
 
+    @jwt_required()
     def delete(self, id):
         table = RestaurantTableModel.get_by_id(id, request.args["manager_id"])
 
@@ -57,6 +61,7 @@ class RestaurantTable(Resource):
 
         return {'message':'No table with id {} exists'.format(id)}, 404
         
+    @jwt_required()
     def put(self, id):
         data = RestaurantTable.parser.parse_args()
         table = RestaurantTableModel.get_by_id(id, data["manager_id"])
@@ -81,6 +86,7 @@ class RestaurantTableList(Resource):
     parser.add_argument('restaurant_id', type=int)
     parser.add_argument('manager_id', type=int)
 
+    @jwt_required()
     def get(self):
 
         args = RestaurantTableList.parser.parse_args() 
