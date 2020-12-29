@@ -23,7 +23,7 @@ async function createNew(pos_x, pos_y, seats, restaurant_id) {
     const url = "/api/table/new?" + Object.keys(params).map(k => encodeURIComponent(k) + '=' + encodeURIComponent(params[k])).join('&');
     const requestOptions = {
         method: 'POST', 
-        headers: { "Content-Type": "application/json" },
+        headers: Object.assign({}, authHeader(),  { "Content-Type": "application/json" }),
         body: JSON.stringify({ pos_x, pos_y, seats, restaurant_id, manager_id })
     }
     const response = await fetch(url, requestOptions);

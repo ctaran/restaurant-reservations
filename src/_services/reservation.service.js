@@ -27,7 +27,7 @@ async function getByTableIDandDate(table_id, date) {
 async function createNew(date_time, customer_name, customer_email, customer_phone, table_id) {
     const requestOptions = {
         method: 'POST', 
-        headers: { "Content-Type": "application/json" },
+        headers: Object.assign({}, authHeader(),  { "Content-Type": "application/json" }),
         body: JSON.stringify({ date_time, customer_name, customer_email, customer_phone, table_id })
     }
     const response = await fetch(`/api/reservation/new`, requestOptions);
