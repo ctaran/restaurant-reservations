@@ -13,7 +13,8 @@ class Home extends Component {
         super();
 
         this.state = {
-            restaurant: null
+            restaurant: null,
+            dataLoaded: false,
         }
 
         this.onCreateTable = this.onCreateTable.bind(this);
@@ -81,11 +82,19 @@ class Home extends Component {
             .then(
                 (data) => {
                     this.setState({
-                       restaurant: data
-                   });
+                       restaurant: data,
+                       dataLoaded: true,
+                    });
                 },
                 (error) => {
                     console.log("message" + error.message);
+                    if (error.status == "404")
+                    {
+                        this.setState({
+                            restaurant: null,
+                            dataLoaded: true,
+                        });
+                    }                                
                 }
             )
     }
@@ -97,7 +106,8 @@ class Home extends Component {
             .then(
                 (data) => {    
                     this.setState({
-                        restaurant: data
+                        restaurant: data,
+                        dataLoaded: true
                     });
                 },
                 (error) => {
@@ -106,8 +116,13 @@ class Home extends Component {
             )
     }
 
+    logout() {
+        authenticationService.logout();
+        this.props.history.push('/login');
+    }
+
     render() {
-        const { restaurant } = this.state;
+        const { restaurant, dataLoaded } = this.state;
         var panes = null;
 
         if (restaurant) {
@@ -121,16 +136,22 @@ class Home extends Component {
         }
 
         return (
-            restaurant ?
-                <div className="row">
-                    <div className="col"></div>
-                    <div className="col-12">
-                        <p className="restaurant-name">=== {restaurant.name} ===</p>
-                        <h3>Manager: {authenticationService.currentUserValue.name}</h3>
-                        <Tab panes={panes} menu={{ pointing: true }} />
-                    </div>
-                    <div className="col"></div>
-                </div> : <DefineRestaurant handleSubmit={this.createRestaurant}/>                           
+            dataLoaded ? 
+                restaurant ?
+                    <div className="row">
+                        <div className="col"></div>
+                        <div className="col-12">
+                            <p className="restaurant-name">=== {restaurant.name} ===</p>
+                            <div className="user-header">
+                                <h3>Manager: {authenticationService.currentUserValue.name}</h3>
+                                {authenticationService.currentUserValue && 
+                                <a href="/" style={{ cursor: 'pointer' }} onClick={this.logout} className="nav-item nav-link">Logout ({authenticationService.currentUserValue.name})</a>}                            
+                            </div>                        
+                            <Tab panes={panes} menu={{ pointing: true }} />
+                        </div>
+                        <div className="col"></div>
+                    </div> : <DefineRestaurant handleSubmit={this.createRestaurant}/>
+                : <div>Loading...</div>
         );
     }
 }

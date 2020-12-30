@@ -42,5 +42,11 @@ code {
 
 .restaurant-name{  
   font-size:xx-large;
-  font-weight:bolder;
+  font-weight:bolder;  
+}
+
+.user-header{
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
 }
