@@ -45,7 +45,7 @@ class Register extends Component {
                                 <Form>
                                     <div className="form-group">
                                         <label htmlFor="username">Name:</label>
-                                        <Field name="username" type="text" className={'form-control' + (errors.name && touched.name ? ' is-invalid' : '')} />
+                                        <Field name="username" type="text" className={'form-control' + (errors.username && touched.username ? ' is-invalid' : '')} />
                                         <ErrorMessage name="username" component="div" className="invalid-feedback" />
                                     </div>
                                     <div className="form-group">
